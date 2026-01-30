@@ -15,10 +15,8 @@ export const metadata = {
     siteName: "Job Weave",
     images: [
       {
-        url: "https://jobweave.vercel.app/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Job Weave Dashboard",
+        url: "https://jobweave.vercel.app/icon.svg",
+        alt: "Job Weave Logo",
       },
     ],
     locale: "en_US",
@@ -28,7 +26,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Job Weave - Track Applications, Manage Assets, & Build Streaks",
     description: "The ultimate free tool for job seekers. Track applications, manage assets, and build streaks.",
-    images: ["https://jobweave.vercel.app/og-image.png"],
+    images: ["https://jobweave.vercel.app/icon.svg"],
   },
   robots: {
     index: true,

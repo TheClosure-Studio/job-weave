@@ -4,7 +4,7 @@ Job Weave is the ultimate free tool for job seekers, designed to bring order to 
 
 Built by **[The Closure Studio](https://theclosurestudio.vercel.app/)**.
 
-![Job Weave Dashboard](./public/og-image.png)
+![Job Weave Logo](./public/icon.svg)
 
 ## Features
 
