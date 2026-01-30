@@ -235,7 +235,7 @@ export default function Dashboard() {
 
       {/* Dock */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 z-50 pointer-events-none w-full md:w-auto flex justify-center md:block">
-          <div className="pointer-events-auto bg-neutral-200/90 backdrop-blur-md p-0.5 flex flex-row md:flex-col items-center gap-2 rounded-full md:rounded-r-2xl md:rounded-l-none shadow-2xl border border-white/20">
+          <div className="pointer-events-auto bg-neutral-200/90 backdrop-blur-md p-0.5 flex flex-row md:flex-col items-center gap-2 rounded-xl md:rounded-r-2xl md:rounded-l-none shadow-2xl border border-white/20">
               <DockButton 
                 active={currentView === 'finds'} 
                 onClick={() => setCurrentView('finds')}
@@ -284,7 +284,7 @@ function DockButton({ active, onClick, icon, label }) {
     return (
         <button 
             onClick={onClick}
-            className={`flex items-center justify-center lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 md:rounded-xl rounded-full transition-all duration-300 ${active ? 'bg-black text-white' : 'hover:bg-white/50 text-neutral-900'}`}
+            className={`flex items-center justify-center lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 md:rounded-xl rounded-lg transition-all duration-300 ${active ? 'bg-black text-white' : 'hover:bg-white/50 text-neutral-900'}`}
             title={label}
         >
             <div className={`text-2xl ${active ? '' : 'text-neutral-900'}`}>
