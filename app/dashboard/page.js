@@ -29,10 +29,7 @@ export default function Dashboard() {
   // Initial Data Fetch & Auth Check
   useEffect(() => {
     if (!user) {
-        // Only redirect if we are sure there's no user (and auth isn't loading, implied by parent)
-        // Check if we are already redirecting to avoid loops? 
-        // Actually, AuthContext handles 'loading' so 'user' is final here.
-        router.push("/login");
+        router.push("/");
         return; 
     }
 
