@@ -4,10 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import Warehouse from "./components/Warehouse";
-import { supabase } from "@/lib/supabaseClient";
-import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
+import { useAuth } from "@/app/context/AuthContext";
+import { supabase } from "@/lib/supabaseClient";
+
+// Components
+import Warehouse from "./components/Warehouse";
+import CustomStreak from "./components/CustomStreak";
+import Streak from "./components/Streak";
+import Track from "./components/Track";
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
@@ -34,7 +39,6 @@ export default function Dashboard() {
     }
 
     const fetchData = async () => {
-        console.log("Fetching data for user:", user.id);
         try {
             // 1. Fetch Profile
             const { data: profile } = await supabase
@@ -60,19 +64,12 @@ export default function Dashboard() {
         } catch (err) {
             console.error("Error fetching dashboard data:", err);
         } finally {
-            console.log("Finished fetching, setting loading false");
             setLoading(false);
         }
     };
 
     fetchData();
   }, [user]);
-
-  // Removed separate fetchItems function as it's now inside useEffect
-  // We need to re-implement fetchItemsRef or just define it for refetching if needed?
-  // Actually, for add/delete/update we modify state optimistically, so we don't strictly need a public fetchItems.
-  // But if we did want to re-fetch, we could define it outside or use a ref.
-  // For now, let's keep it simple.
 
   const addTrackItem = async () => {
       if (!user) return;
@@ -122,7 +119,6 @@ export default function Dashboard() {
           if (error) throw error;
       } catch (err) {
            console.error("Error updating item:", err);
-           // Revert? (Optional, skipping for simplicity in this iteration)
       }
   };
 
@@ -137,12 +133,14 @@ export default function Dashboard() {
                 loading={loading}
             />,
     warehouse: <Warehouse />,
+    custom_streaks: <CustomStreak />,
   };
   
   const headerTitles = {
       finds: "Job Weave / Finds",
-      track: "Job Weave / Streak & Tracker",
-      warehouse: "Job Weave / Warehouse"
+      track: "Job Weave / Tracker",
+      warehouse: "Job Weave / Warehouse",
+      custom_streaks: "Job Weave / Streaks"
   }
 
   return (
@@ -168,7 +166,6 @@ export default function Dashboard() {
                  </h1>
              </div>
 
-             {/* Avatar */}
              {/* Avatar & Profile Menu */}
              <div className="relative">
                  <button 
@@ -221,10 +218,7 @@ export default function Dashboard() {
       </header>
       
       {/* Protected View Content */}
-      <div className="flex-1 w-full max-w-[1400px] p-4 md:p-6 pb-24 md:pb-32 pt-24 md:pt-28 z-10">
-         {/* Header */}
-
-
+      <div className="flex-1 w-full max-w-[1400px] p-4 md:p-6 pb-24 md:pb-32 pt-24 md:pt-28 z-10 w-full">
          <AnimatePresence mode="wait">
             <motion.div
                 key={currentView}
@@ -252,7 +246,13 @@ export default function Dashboard() {
                 active={currentView === 'track'} 
                 onClick={() => setCurrentView('track')}
                 icon={<TrackIcon active={currentView === 'track'} />}
-                label="Track & Streak"
+                label="Tracker"
+              />
+              <DockButton 
+                active={currentView === 'custom_streaks'} 
+                onClick={() => setCurrentView('custom_streaks')}
+                icon={<FireIcon active={currentView === 'custom_streaks'} />}
+                label="Streaks"
               />
               <DockButton 
                 active={currentView === 'warehouse'} 
@@ -321,6 +321,15 @@ function WarehouseIcon({ active }) {
     )
 }
 
+function FireIcon({ active }) {
+    return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M8.5 14.5C8.5 14.5 9.5 10.5 14.5 8.5C14.5 8.5 12.5 17 17 16C17 16 16 21 12 21C8 21 8.5 14.5 8.5 14.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+             <path d="M12 2C12 2 4.5 7.5 4.5 13.5C4.5 19.5 12 22 12 22C12 22 19.5 19.5 19.5 13.5C19.5 7.5 12 2 12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+    )
+}
+
 // Placeholder Views
 function FindsView() {
     return (
@@ -331,10 +340,6 @@ function FindsView() {
     )
 }
 
-import Streak from "./components/Streak";
-import Track from "./components/Track";
-
-
 function TrackStreakView({ items, onAdd, onDelete, onUpdate, loading }) {
     if (loading) {
         return <div className="flex h-full items-center justify-center text-neutral-500">Loading your data...</div>;
@@ -344,7 +349,12 @@ function TrackStreakView({ items, onAdd, onDelete, onUpdate, loading }) {
         <div className="flex flex-col h-full overflow-hidden">
             {/* Streak Section (Top) */}
             <div className="flex-shrink-0">
-                <Streak items={items} />
+                <Streak 
+                    items={items} 
+                    isCheckedIn={items.some(item => item.date === new Date().toISOString().split('T')[0])}
+                    title="Application Streak"
+                    description="Keep your momentum going! Apply to jobs daily."
+                />
             </div>
 
             {/* Track Section (Remaining Height) */}
@@ -359,5 +369,4 @@ function TrackStreakView({ items, onAdd, onDelete, onUpdate, loading }) {
             </div>
         </div>
     )
-} 
-
+}

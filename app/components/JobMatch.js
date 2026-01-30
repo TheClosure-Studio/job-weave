@@ -53,7 +53,7 @@ export default function JobMatch() {
       <section className="py-12 md:py-20 px-4 md:px-10">
        <div className="mx-auto">
            <div className="">
-                <AnimatedText text="Weave / Streak & Tracker" className="text-5xl text-neutral-50 mb-4 tracking-wide py-5 font-space" />
+                <AnimatedText text="Weave / Application Tracker" className="text-5xl text-neutral-50 mb-4 tracking-wide py-5 font-space" />
                
            </div>
 
@@ -63,7 +63,7 @@ export default function JobMatch() {
                <div className="   lg:md-6 relative overflow-hidden group w-full lg:w-1/2">
                 <div className="text-white">
                     <h2 className="lg:text-4xl md:text-4xl text-3xl font-light mb-6 max-w-2xl text-neutral-200 font-space">
-                   Streak tracker
+                   Application Streak
                </h2>
                <p className="text-neutral-500  font-light leading-relaxed text-sm md:text-base">
                    Track your job application streaks, interview preparation, and career milestones. Never miss a beat.
@@ -120,6 +120,50 @@ export default function JobMatch() {
         
         {/* Left Text */}
         <div>
+           <AnimatedText text="Weave / Custom Streaks" className="text-5xl mb-6 tracking-wide font-space py-5 text-neutral-50" />
+           <h2 className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 py-4 md:py-6 lg:py-12">
+            create, track 
+            <div className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 ">be consistent</div>
+           </h2>
+
+           <div className="space-y-10">
+               <div>
+                   <h3 className="text-xl text-neutral-300 font-light mb-2 font-space">Create & Manage Custom Streaks</h3>
+                   <p className="text-neutral-500 leading-relaxed font-light text-sm md:text-base ">
+                       Create custom streaks for your job search journey. Track your progress, set goals, and stay motivated with personalized reminders and insights.
+                   </p>
+               </div>
+               <div className="pt-6 border-t border-neutral-800">
+                   <h3 className="text-xl text-white/30 font-light font-space">Weave Streaks ( Personalized Streaks )</h3>
+               </div>
+               
+           </div>
+        </div>
+
+        {/* Right Dashboard Image/Mockup */}
+        <div className="relative bg-[#111] rounded p-4 overflow-hidden">
+             {/* Header Mockup */}
+             <div className="flex justify-between items-center lg:mb-6 md:mb-4 mb-2 px-2">
+                 <div className="flex gap-2">
+                     <span className="lg:w-3 lg:h-3 md:w-2 md:h-2 w-1.5 h-1.5  rounded-full bg-blue-100/10" />
+                     <span className="lg:w-3 lg:h-3 md:w-2 md:h-2 w-1.5 h-1.5  rounded-full bg-blue-100/10" />
+                 </div>
+                 <div className="lg:w-40 lg:h-2 md:w-20 md:h-2 w-16 h-1 bg-neutral-800 rounded-full" />
+             </div>
+              <div className='lg:h-[350px] w-full flex items-center justify-center'>
+                <Image src="/streaks2.png" alt="Dashboard" width={1000} height={1000} className="object-cover rounded-md" />
+             </div>
+             
+             
+        </div>
+
+      </div>
+    </section>
+    <section className="py-16 md:py-32 px-4 md:px-10 ">
+      <div className="grid lg:grid-cols-2 gap-20 items-start  mx-auto">
+        
+        {/* Left Text */}
+        <div>
            <AnimatedText text="Weave / Warehouse" className="text-5xl mb-6 tracking-wide font-space py-5 text-neutral-50" />
            <h2 className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 py-4 md:py-6 lg:py-12">
             store, copy, 
@@ -128,7 +172,7 @@ export default function JobMatch() {
 
            <div className="space-y-10">
                <div>
-                   <h3 className="text-xl text-neutral-300 font-medium mb-2 font-space">Store & Manage Job Assets</h3>
+                   <h3 className="text-xl text-neutral-300 font-light mb-2 font-space">Store & Manage Job Assets</h3>
                    <p className="text-neutral-500 leading-relaxed font-light text-sm md:text-base ">
                        Store your quick links( LinkedIn, GitHub, Portfolio Website, Leetcode etc. ) & Files( Cover Letter, Resume, Images, Important Documents etc. ) in one place. And When you need it, just copy and paste.
                    </p>

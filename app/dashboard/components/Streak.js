@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-export default function Streak({ items = [] }) {
+export default function Streak({ items = [], showBreakdown = true, onCheckIn, isCheckedIn, title, description, onDayClick, todayCount, onAdjustCount }) {
   const [contributionData, setContributionData] = useState([]);
   const [stats, setStats] = useState({ currentStreak: 0, maxStreak: 0, activeDays: 0 });
   const [months, setMonths] = useState([]);
@@ -14,20 +14,22 @@ export default function Streak({ items = [] }) {
     const activityMap = {};
     items.forEach(item => {
         if (item.date) {
-            activityMap[item.date] = (activityMap[item.date] || 0) + 1;
+            activityMap[item.date] = (activityMap[item.date] || 0) + (item.count || 1);
         }
     });
 
     // 2. Generate daily data for the last 364 days
     const data = [];
     const today = new Date();
-    // Do not zero out time, as it can cause timezone shifts when converting to ISO UTC string
-    // compared to the item dates which are generated from new Date().toISOString()
     
     for (let i = 0; i < 364; i++) {
         const date = new Date(today);
         date.setDate(date.getDate() - (363 - i)); // Go back 363 days
         const dateString = date.toISOString().split('T')[0];
+        
+        // If this is a custom streak (onCheckIn exists) and it is today, 
+        // rely on isCheckedIn prop for visual feedback immediately if items aren't updated yet
+        // OR just rely on items (since we optimistically update items in parent)
         
         const count = activityMap[dateString] || 0;
         
@@ -77,6 +79,16 @@ export default function Streak({ items = [] }) {
         if (data[i].level > 0) {
             currStreak++;
         } else {
+            // If it's today and we haven't done it yet, don't break streak immediately if yesterday was active?
+            // Standard streak logic: if today is 0, check yesterday.
+            // However, the loop goes backwards. data[length-1] is TODAY.
+            // If today is 0, we can check if yesterday (index-2) is active.
+            // But this loop just counts consecutive > 0.
+            
+            // Allow gap of today if checking early in the day?
+            // Actually, for "Current Streak" display, usually we visualize what we have.
+            // If user hasn't checked in today, streak might show 0 or previous streak.
+            // Let's stick to strict counting for now.
             break;
         }
     }
@@ -99,9 +111,7 @@ export default function Streak({ items = [] }) {
         statusCounts
     });
 
-    // ... (rest of Month labels logic same)
-    
-    // 4. Generate Month Labels (Same logic as before)
+    // 4. Generate Month Labels
     const monthLabels = [];
     let lastMonth = -1;
     for (let w = 0; w < 52; w++) {
@@ -132,28 +142,51 @@ export default function Streak({ items = [] }) {
   };
 
   return (
-    <div className="w-full bg-neutral-950 border border-white/10 rounded p-4 md:p-6 mb-6 backdrop-blur-sm">
+    <div className="w-full bg-neutral-950 border border-white/10 rounded p-4 md:p-6 mb-6 backdrop-blur-sm relative group/card">
+      {(title || description) && (
+          <div className="mb-6">
+              {title && <h3 className="text-xl font-space font-light text-neutral-200">{title}</h3>}
+              {description && <p className="text-xs text-neutral-500 mt-1">{description}</p>}
+          </div>
+      )}
+
       <div className="flex flex-col xl:flex-row gap-8">
         
         {/* Stats Section */}
         <div className="flex-shrink-0 flex xl:flex-col gap-4 min-w-[200px]">
-           <div className="bg-gradient-to-br from-neutral-900 to-black rounded-xl p-5 border border-white/10 flex items-center gap-4 shadow-xl">
-               <div className="w-14 h-14 rounded-full bg-orange-500/10 flex items-center justify-center text-3xl animate-pulse ring-1 ring-orange-500/50">
+           <div 
+                onClick={!onAdjustCount ? onCheckIn : undefined}
+                className={`
+                    rounded-xl md:p-5 p-3 border flex items-center gap-4 shadow-xl transition-all duration-300
+                    ${!onAdjustCount && onCheckIn ? 'cursor-pointer active:scale-95 hover:border-white/20' : ''}
+                    ${isCheckedIn 
+                        ? 'bg-gradient-to-br from-orange-900/40 to-black border-orange-500/30' 
+                        : 'bg-gradient-to-br from-neutral-900 to-black border-white/10'}
+                `}
+           >
+               <div className={`
+                    md:w-14 md:h-14 w-10 h-10 rounded-full flex items-center justify-center text-3xl transition-all duration-500
+                    ${isCheckedIn 
+                        ? 'bg-orange-500/20 ring-1 ring-orange-500/50 scale-110 shadow-[0_0_20px_rgba(249,115,22,0.4)]' 
+                        : 'bg-white/5 ring-0 scale-100 opacity-50 grayscale'}
+               `}>
                    🔥
                </div>
                <div>
-                   <div className="text-3xl font-semibold text-neutral-400 font-space leading-none">{stats.currentStreak}</div>
+                   <div className="md:text-3xl text-xl font-semibold text-neutral-400 font-space leading-none">
+                       {stats.currentStreak}
+                   </div>
                    <div className="text-xs text-neutral-400 uppercase tracking-wider font-medium mt-1">Day Streak</div>
                </div>
            </div>
            
            <div className="grid grid-cols-2 gap-3">
                 <div className="bg-neutral-950/50 rounded p-3 border border-white/5">
-                    <div className="text-xl font-semibold text-neutral-400 font-space">{stats.activeDays}</div>
+                    <div className="md:text-xl text-lg font-semibold text-neutral-400 font-space">{stats.activeDays}</div>
                     <div className="text-xs text-neutral-400 uppercase tracking-wider">Active Days</div>
                 </div>
                 <div className="bg-neutral-950/50 rounded p-3 border border-white/5">
-                    <div className="text-xl font-semibold text-neutral-400 font-space">{stats.maxStreak}</div>
+                    <div className="md:text-xl text-lg font-semibold text-neutral-400 font-space">{stats.maxStreak}</div>
                     <div className="text-xs text-neutral-400 uppercase tracking-wider">Max Streak</div>
                 </div>
            </div>
@@ -189,7 +222,8 @@ export default function Streak({ items = [] }) {
                                 return (
                                     <div 
                                         key={dayIndex}
-                                        className={`w-3 h-3 transition-colors duration-300 ${getLevelColor(dayData.level)}`}
+                                        onClick={() => onDayClick && onDayClick(dayData.date.toISOString().split('T')[0], dayData.count)}
+                                        className={`w-3 h-3 transition-colors duration-300 ${getLevelColor(dayData.level)} ${onDayClick ? 'cursor-pointer hover:border-white/50' : ''}`}
                                         title={`${dayData.date.toDateString()} (Level: ${dayData.level})`}
                                     />
                                 )
@@ -215,39 +249,74 @@ export default function Streak({ items = [] }) {
 
       </div>
 
-      {/* Status Breakdown Section */}
-      <div className="mt-6 pt-6 border-t border-white/10">
-        <h3 className="text-xs font-space text-neutral-500 uppercase tracking-wider mb-4">Application Overview</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            
-            {/* Total */}
-            <div className="bg-neutral-950/50 rounded-xl p-4 border border-white/5 flex flex-col justify-between group hover:border-white/10 transition-colors">
-                <div className="text-neutral-500 text-[10px] uppercase tracking-wider mb-1">Total</div>
-                <div className="flex items-end justify-between">
-                    <div className="text-2xl font-bold text-white font-space">{stats.totalContributions}</div>
-                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-                        Σ
-                    </div>
-                </div>
-            </div>
+      {/* Level Controls (Bottom Center) */}
+      {onAdjustCount && (
+          <div className="flex justify-center mt-2 lg:mt-0">
+               <div className={`
+                   rounded-full flex items-center transition-all duration-500
+                   
+               `}>
+                   
+                   <div className="flex items-center gap-4 bg-neutral-800/50 rounded-full p-1 border border-white/5">
+                       <button 
+                            onClick={(e) => { e.stopPropagation(); onAdjustCount(-1); }}
+                            className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-lg hover:bg-white/10 active:scale-95 transition-all text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                            disabled={todayCount <= 0}
+                       >
+                           -
+                       </button>
+                       
+                       <div className={`text-xl font-bold font-space w-6 text-center ${todayCount > 0 ? 'text-orange-500' : 'text-neutral-600'}`}>
+                           {todayCount}
+                       </div>
+                       
+                       <button 
+                            onClick={(e) => { e.stopPropagation(); onAdjustCount(1); }}
+                            className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-lg hover:bg-white/10 active:scale-95 transition-all text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                            disabled={todayCount >= 10}
+                       >
+                           +
+                       </button>
+                   </div>
+               </div>
+          </div>
+      )}
 
-            {/* Statuses */}
-            {[
-                { label: 'Wishlist', count: stats.statusCounts?.Wishlist || 0, color: 'text-neutral-400', bg: 'bg-white/5' },
-                { label: 'Applied', count: stats.statusCounts?.Applied || 0, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
-                { label: 'Interview', count: stats.statusCounts?.Interview || 0, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' },
-                { label: 'Offer', count: stats.statusCounts?.Offer || 0, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
-                { label: 'Rejected', count: stats.statusCounts?.Rejected || 0, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
-            ].map((stat, i) => (
-                <div key={i} className={`p-4  ${stat.bg} flex flex-col justify-between group hover:brightness-110 transition-all`}>
-                    <div className={`${stat.color} text-[10px] uppercase tracking-wider mb-1 opacity-80`}>{stat.label}</div>
+      {/* Status Breakdown Section - Conditional */}
+      {showBreakdown && (
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <h3 className="text-xs font-space text-neutral-500 uppercase tracking-wider mb-4">Application Overview</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                
+                {/* Total */}
+                <div className="bg-neutral-950/50 rounded-xl p-4 border border-white/5 flex flex-col justify-between group hover:border-white/10 transition-colors">
+                    <div className="text-neutral-500 text-[10px] uppercase tracking-wider mb-1">Total</div>
                     <div className="flex items-end justify-between">
-                        <div className={`text-2xl font-bold font-space ${stat.color}`}>{stat.count}</div>
+                        <div className="text-2xl font-bold text-white font-space">{stats.totalContributions}</div>
+                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                            Σ
+                        </div>
                     </div>
                 </div>
-            ))}
-        </div>
-      </div>
+
+                {/* Statuses */}
+                {[
+                    { label: 'Wishlist', count: stats.statusCounts?.Wishlist || 0, color: 'text-neutral-400', bg: 'bg-white/5' },
+                    { label: 'Applied', count: stats.statusCounts?.Applied || 0, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
+                    { label: 'Interview', count: stats.statusCounts?.Interview || 0, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' },
+                    { label: 'Offer', count: stats.statusCounts?.Offer || 0, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
+                    { label: 'Rejected', count: stats.statusCounts?.Rejected || 0, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+                ].map((stat, i) => (
+                    <div key={i} className={`p-4  ${stat.bg} flex flex-col justify-between group hover:brightness-110 transition-all`}>
+                        <div className={`${stat.color} text-[10px] uppercase tracking-wider mb-1 opacity-80`}>{stat.label}</div>
+                        <div className="flex items-end justify-between">
+                            <div className={`text-2xl font-bold font-space ${stat.color}`}>{stat.count}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+          </div>
+      )}
     </div>
   );
 }
