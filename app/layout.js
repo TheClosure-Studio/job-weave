@@ -49,6 +49,9 @@ export const metadata = {
   alternates: {
     canonical: "https://jobweave.vercel.app",
   },
+  verification: {
+    google: "CosTs-8OfPTmpuILX4En-C9yqeTO6lJFgkQECagtOgc",
+  },
 };
 
 import { AuthProvider } from "@/app/context/AuthContext";
