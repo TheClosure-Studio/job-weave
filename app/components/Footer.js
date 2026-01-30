@@ -3,9 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 export default function Footer() {
   return (
-    <footer className="pt-20 md:pt-32 px-4 md:px-20 pb-10 bg-gradient-to-t from-[#07091d] to-black min-h-screen">
+    <footer className="pt-20 md:pt-32 px-4 md:px-20 pb-10 bg-gradient-to-t from-[#07091d] to-black lg:min-h-screen">
          <div className="max-w-[1400px] mx-auto text-center pb-20 md:pb-42">
-             <h2 className="text-2xl md:text-3xl lg:text-5xl text-white font-light mb-8 font-space">
+             <h2 className="text-2xl md:text-3xl lg:text-5xl text-white font-light mb-18 font-space">
                  Land your dream job, stress-free.
              </h2>
              <Link href="/register" className="bg-white text-black px-4 md:px-6 lg:px-8 py-2 md:py-3 rounded-2xl font-medium hover:bg-gray-100 transition-colors font-space ">

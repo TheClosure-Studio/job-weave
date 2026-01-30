@@ -54,7 +54,7 @@ export default function Hero() {
         </div>
         <div className="text-center py-56 md:py-80 max-w-6xl mx-auto z-10 ">
              <div className="md:text-sm text-xs text-neutral-500 mb-4 tracking-wide font-space">Weave / Finds</div>
-             <h2 className="text-md md:text-2xl lg:text-4xl font-light leading-tight text-white">
+             <h2 className="text-md md:text-2xl lg:text-4xl font-light leading-tight text-white text-gradient">
                  Don't lag behind in the job market.
              </h2>
              <p className="text-lg md:text-2xl lg:text-4xl font-light text-neutral-500 font-space md:mt-2 mt-1 leading-tight">

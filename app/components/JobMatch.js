@@ -9,7 +9,7 @@ export default function JobMatch() {
         
         {/* Left Text */}
         <div>
-           <AnimatedText text="Weave / Finds" className="text-5xl mb-6 tracking-wide font-space py-5 text-gradient" />
+           <AnimatedText text="Weave / Finds" className="text-5xl mb-6 tracking-wide font-space py-5 text-neutral-50" />
            <h2 className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 py-4 md:py-6 lg:py-12">
             post, apply, 
             <div className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 ">get hired</div>
@@ -53,7 +53,7 @@ export default function JobMatch() {
       <section className="py-12 md:py-20 px-4 md:px-10">
        <div className="mx-auto">
            <div className="">
-                <AnimatedText text="Weave / Streak & Tracker" className="text-5xl text-neutral-500 mb-4 tracking-wide py-5 text-gradient font-space" />
+                <AnimatedText text="Weave / Streak & Tracker" className="text-5xl text-neutral-50 mb-4 tracking-wide py-5 font-space" />
                
            </div>
 
@@ -62,8 +62,8 @@ export default function JobMatch() {
                {/* Card 1 */}
                <div className="   lg:md-6 relative overflow-hidden group w-full lg:w-1/2">
                 <div className="text-white">
-                    <h2 className="lg:text-5xl md:text-4xl text-3xl font-light mb-6 max-w-2xl text-white font-space">
-                   Your personal streak tracker
+                    <h2 className="lg:text-4xl md:text-4xl text-3xl font-light mb-6 max-w-2xl text-neutral-200 font-space">
+                   Streak tracker
                </h2>
                <p className="text-neutral-500  font-light leading-relaxed text-sm md:text-base">
                    Track your job application streaks, interview preparation, and career milestones. Never miss a beat.
@@ -104,7 +104,7 @@ export default function JobMatch() {
                         </div>
                     </div>
                      <div className="text-white ">
-                    <h2 className="lg:text-5xl md:text-4xl text-3xl font-light mb-6 max-w-2xl text-white font-space">
+                    <h2 className="lg:text-4xl md:text-4xl text-3xl font-light mb-6 max-w-2xl text-neutral-200 font-space">
                    Application tracker
                </h2>
                <p className="md:text-base text-sm text-neutral-500 max-w-xl font-light z-100">
@@ -120,7 +120,7 @@ export default function JobMatch() {
         
         {/* Left Text */}
         <div>
-           <AnimatedText text="Weave / Warehouse" className="text-5xl mb-6 tracking-wide font-space py-5 text-gradient" />
+           <AnimatedText text="Weave / Warehouse" className="text-5xl mb-6 tracking-wide font-space py-5 text-neutral-50" />
            <h2 className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 py-4 md:py-6 lg:py-12">
             store, copy, 
             <div className="text-2xl md:text-3xl lg:text-5xl font-light shadow-none text-neutral-500 ">paste</div>
