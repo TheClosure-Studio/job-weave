@@ -245,7 +245,7 @@ export default function Streak({ items = [], showBreakdown = true, onCheckIn, is
                                                 key={dayIndex}
                                                 onClick={() => onDayClick && onDayClick(dayData.date.toISOString().split('T')[0], dayData.count)}
                                                 className={`w-3 h-3 transition-colors duration-300 ${getLevelColor(dayData.level)} ${onDayClick ? 'cursor-pointer hover:border-white/50' : ''}`}
-                                                title={`${dayData.date.toDateString()} (Level: ${dayData.level})`}
+                                                title={`${dayData.date.toDateString()} (Count: ${dayData.count})`}
                                             />
                                         )
                                     })}
@@ -294,7 +294,7 @@ export default function Streak({ items = [], showBreakdown = true, onCheckIn, is
                             <button
                                 onClick={(e) => { e.stopPropagation(); onAdjustCount(1); }}
                                 className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-lg hover:bg-white/10 active:scale-95 transition-all text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed"
-                                disabled={todayCount >= 10}
+                                disabled={todayCount >= 50}
                             >
                                 +
                             </button>
